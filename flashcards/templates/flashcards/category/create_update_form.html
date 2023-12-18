@@ -1,0 +1,12 @@
+{% extends "flashcards/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="medium-container">
+        <h5>Category</h5>
+        <form method="post" class="form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" value="Submit" class="button">
+        </form>
+    </div>
+{% endblock %}

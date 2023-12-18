@@ -1,0 +1,52 @@
+{% extends 'flashcards/base.html' %}
+{% block content %}
+<div class="medium-container">
+    <a href="{% url 'flashcards:dashboard' %}" class="close-button">&times;</a>
+    <h2>{{ question.answer }}</h2>
+    <form id="quizForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="question_id" value="{{ question.id }}">
+        <div class="progress-container" style="width:300px;">
+            <div class="progress-bar" style="width: {{ progress_percentage }}%"></div>
+        </div>
+        <ul style=" width: 300px; padding: 0; list-style-type: none;">
+            {% for choice in choices %}
+            <input class="button" type="radio" name="answer" id="{{ choice }}" value="{{ choice }}">
+            <label class="button" for="{{ choice }}">{{ choice }}</label>
+            {% endfor %}
+            <input class="button" id="check-btn" type="button" value="Check">
+        </ul>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showAlert(message, alertType, submitForm = false) {
+        $('#result').removeClass('d-none').addClass('alert alert-' + alertType).text(message);
+        setTimeout(function() {
+            $('#result').removeClass('alert-' + alertType).addClass('d-none').text('');
+            if (submitForm) {
+                $('#quizForm').submit();
+            }
+        }, 2000);
+    }
+
+    function processAnswer() {
+        var userAnswer = $('input[name="answer"]:checked').val();
+        var correctAnswer = "{{ question.question }}";
+        var isCorrect = correctAnswer === userAnswer;
+        if (isCorrect) {
+            showAlert('Correct answer!', 'success', true);
+        } else {
+            showAlert('Your answer is incorrect. Correct answer is: ' + correctAnswer, 'danger', true);
+        }
+    }
+    $('#check-btn').on('click', function(event) {
+        event.preventDefault();
+        if ($('input[name="answer"]:checked').length > 0) {
+            processAnswer();
+        } else {
+            showAlert('Please select an answer before proceeding.', 'warning');
+        }
+    });
+</script>
+{% endblock %}

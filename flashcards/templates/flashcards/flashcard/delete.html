@@ -1,0 +1,13 @@
+{% extends 'flashcards/base.html' %}
+{% block content %}
+<div class="medium-container">
+  <p>Are you sure you want to delete this flashcard?</p>
+  <div class="inline-elements">
+    <a href="{{ return_url }}" class="secondary-button">Cancel</a>
+    <form action="{% url 'flashcards:flashcard_delete' flashcard.id %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="alert-button">Delete</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

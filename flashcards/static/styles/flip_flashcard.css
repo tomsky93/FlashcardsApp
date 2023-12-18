@@ -1,0 +1,129 @@
+label {
+
+-webkit-perspective: 1000px;
+perspective: 1000px;
+-webkit-transform-style: preserve-3d;
+transform-style: preserve-3d;
+width: 600px;
+height: 300px;
+position: absolute;
+left: 50%;
+top: 30%;
+-webkit-transform: translate(-50%, -50%);
+transform: translate(-50%, -50%);
+cursor: pointer;
+
+}
+
+.flashcard{
+
+font-size: 40px;
+-webkit-transform-style: preserve-3d;
+transform-style: preserve-3d;
+-webkit-transition: all 600ms;
+transition: all 600ms;
+z-index: 20;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+height: 300px;
+border-radius: 25px;
+box-shadow: 1px 1px 8px -4px rgba(0, 0, 0, 1);
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+
+}
+
+.flashcard div {
+
+-webkit-backface-visibility: hidden;
+backface-visibility: hidden;
+}
+
+.main-content {
+
+text-align: center;
+flex-grow: 1;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.additional-info {
+text-align: center;
+font-size: 14px;
+}
+
+.flashcard .back{
+position: absolute;
+-webkit-transform: rotateX(180deg);
+transform: rotateX(180deg);
+
+}
+
+input {
+display: none;
+
+}
+
+:checked + .flashcard {
+transform: rotateX(180deg);
+-webkit-transform: rotateX(180deg);
+
+}
+
+.back-buttons {
+position: absolute;
+bottom: -50px;
+left: 50%;
+transform: translateX(-50%);
+display: flex;
+justify-content: center;
+width: 600px;
+padding: 0 20px;
+}
+
+.back-buttons button {
+margin: 0 10px;
+}
+
+.checkmark-button, .crossmark-button {
+border: none;
+padding: 10px 20px;
+text-align: center;
+display: inline-block;
+color:white;
+font-size: 16px;
+margin: 4px 2px;
+cursor: pointer;
+border-radius: 5px;
+font-weight: bold;
+width: 60px;
+}
+
+.checkmark-button {
+background-color: green;
+}
+
+.checkmark-button:hover {
+background-color: darkgreen;
+}
+
+.checkmark-button:after {
+content: "\2713";
+}
+
+.crossmark-button {
+background-color: red;
+}
+
+.crossmark-button:hover {
+background-color: rgb(153, 3, 3);
+color: white;
+}
+
+.crossmark-button:after {
+content: "\2716";
+}

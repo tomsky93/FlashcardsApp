@@ -1,0 +1,56 @@
+{% extends 'flashcards/base.html' %}
+{% block content %}
+<div class="medium-container">
+    <a href="{% url 'flashcards:dashboard' %}" class="close-button">&times;</a>
+    <h3>{{ random_flashcard.answer }}</h3>
+    <form id="quiz-form" method="post" action="{% url 'flashcards:completion_quiz' category_id=category.id %}">
+        {% csrf_token %}
+        <input type="hidden" name="flashcard_id" value="{{ random_flashcard.id }}">
+        <input type="text" class="form-control" id="user-translation-input"
+            name="user_translation" required autocomplete="off" autofocus>
+        <button class="button" type="button" id="check-btn">Check</button>
+    </form>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function showAlert(message, alertType) {
+        $('#result').removeClass('d-none').addClass('alert alert-' + alertType).text(message);
+        setTimeout(function() {
+            $('#result').removeClass('alert-' + alertType).addClass('d-none').text('');
+        }, 2000);
+    }
+
+    function processAnswer() {
+        var userAnswer = $('#user-translation-input').val();
+        var correctAnswer = "{{ random_flashcard.question }}";
+        var isCorrect = correctAnswer.toLowerCase() === userAnswer.toLowerCase();
+        if (isCorrect) {
+            showAlert('Correct answer!', 'success');
+        } else {
+            showAlert('Your answer is incorrect. Correct answer is: ' + correctAnswer, 'danger');
+        }
+        setTimeout(function() {
+            $('#quiz-form').submit();
+        }, 1000);
+    }
+    $('#check-btn').on('click', function() {
+        var userTranslationInput = $('#user-translation-input');
+        if (userTranslationInput.val() === "") {
+            showAlert("Please enter a translation.", "danger");
+            return;
+        }
+        processAnswer();
+    });
+    $('#user-translation-input').on('keypress', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            var userTranslationInput = $('#user-translation-input');
+            if (userTranslationInput.val() === "") {
+                showAlert("Please enter a translation.", "danger");
+                return;
+            }
+            processAnswer();
+        }
+    });
+</script>
+{% endblock %}

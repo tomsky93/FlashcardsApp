@@ -1,0 +1,79 @@
+{% extends 'flashcards/base.html' %}
+{% load flashcard_tags %}
+{% block content %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".favorite-button").click(function(event) {
+            event.preventDefault();
+            var button = $(this);
+            var flashcardId = button.data("flashcard-id");
+            var csrfToken = button.closest("form").find("input[name='csrfmiddlewaretoken']")
+        .val(); 
+            var baseUrl = window.location.origin + "/add_to_favorites/" + flashcardId + "/";
+            $.ajax({
+                url: baseUrl,
+                method: "POST",
+                dataType: "json",
+                headers: {
+                    "X-CSRFToken": csrfToken
+                },
+                success: function(data) {
+                    if (data.is_favorite) {
+                        button.removeClass("bi-star").addClass("bi-star-fill");
+                    } else {
+                        button.removeClass("bi-star-fill").addClass("bi-star");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log("Error toggling favorite status.");
+                    console.log("Status:", status);
+                    console.log("Error:", error);
+                }
+            });
+        });
+    });
+</script>
+
+<div class="medium-container" style="width:55%">
+    <a href="{% url 'flashcards:dashboard' %}" class="close-button">&times;</a>
+    <div class="dropdown">
+        <button class="dropbtn">{{ category.category_name}} &#11167;</button>
+        <div class="dropdown-content">
+            <a href="{% url 'flashcards:category_update' category.pk %}">Edit category</a>
+            <a href="{% url 'flashcards:category_delete' category.pk %}">Delete category</a>
+            <a href="{% url 'flashcards:flashcard_create' category.pk %}">Add flashcards</a>
+        </div>
+    </div>
+    <div class="inline-elements">
+        <a href="{% url 'flashcards:quiz' category_id=category.id %}" class="button">Start quiz</a>
+        <a href="{% url 'flashcards:random_flashcards' category_id=category.id %}" class="button">Learn</a>
+        <a href="{% url 'flashcards:completion_quiz' category_id=category.id %}" class="button">Completion test</a>
+    </div>
+    <br>
+    <div class="tabs">
+        <input type="radio" id="tab-1-1" name="tab-group-1" checked>
+        <label for="tab-1-1">All Flashcards</label>
+        <div>
+            {% flashcards_by_category request.user category.pk %}
+        </div>
+        <input type="radio" id="tab-1-2" name="tab-group-1">
+        <label for="tab-1-2">Learned</label>
+        <div>
+            {% learned_flashcards request.user category.pk %}
+        </div>
+        <input type="radio" id="tab-1-3" name="tab-group-1">
+        <label for="tab-1-3">Studying</label>
+        <div>
+            {% studying_flashcards request.user category.pk %}
+        </div>
+        <input type="radio" id="tab-1-4" name="tab-group-1">
+        <label for="tab-1-4">Favorites</label>
+        <div>
+            {% favourites_by_category request.user category.pk %}
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% load static %}
+<style>
+  .card1 {
+    display: flex;
+    align-items: center;
+    justify-items: center;
+    width: 100%;
+    background-color: white;
+    margin-bottom: 0.5em;
+    padding: 0.25em;
+    transition: all 0.5s;
+    }
+    
+    .card1:hover {
+    background-color: #dddddd;
+    }
+    
+    .column {
+    padding: 0 10px;
+    text-align: left;
+    }
+    
+    .column:last-child {
+    border-right: none;
+    text-align: right;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    }
+    
+    .first,
+    .second {
+    border-right: 1px solid rgb(185, 185, 185);
+    width: 45%;
+    
+    }
+
+</style>
+
+{% for flashcard in flashcards %}
+<div class="card1">
+  <div class="column first">{{ flashcard.question }}</div>
+  <div class="column second">{{ flashcard.answer }}</div>
+  <div class="column">
+    <a href="{% url 'flashcards:flashcard_update' flashcard.id %}" title="Edit">
+
+      <i class="bi bi-pencil"></i></a>
+    <a href="{% url 'flashcards:flashcard_delete' flashcard.id %}" title="Delete">
+      <i class="bi bi-trash3"></i></a>
+    <form>
+      {% csrf_token %}
+      <button class="favorite-button {% if flashcard.is_favorite %} bi-star-fill {% else %} bi-star {% endif %}"
+        data-flashcard-id="{{ flashcard.id }}">
+      </button>
+    </form>
+  </div>
+</div>
+{% endfor %}

@@ -1,0 +1,26 @@
+{% extends 'flashcards/base.html' %}
+{% load static %}
+{% block content %}
+<div class="medium-container">
+  <div style="text-align: right;">
+    <a href="{% url 'flashcards:dashboard' %}" class="close-button">&times;</a>
+  </div>
+  <div class="donutContainer">
+    <h2>Your score is</h2>
+    <svg width="400" height="400">
+      <g>
+        <title>Layer</title>
+        <circle class="donutBackground" r="139.71398" cy="202" cx="202" />
+        <circle class="donut" r="139.71398" cy="202" cx="202" stroke="#3F77BF" fill="none"
+          style="stroke-dashoffset: {{ stroke_dashoffset }}" />
+        <text x="202" y="202" text-anchor="middle" dominant-baseline="central" font-size="50" fill="#3F77BF"
+          transform="rotate(90 202 202)">{{ accuracy_percent }}</text>
+      </g>
+    </svg>
+    <a href="{% url 'flashcards:quiz' category_id=category %}" class="button" style="width: 50%;"
+      title="Start quiz">Start again</a>
+  </div>
+</div>
+
+
+{% endblock %}

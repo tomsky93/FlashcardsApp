@@ -1,0 +1,28 @@
+{% extends "flashcards/base.html" %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'styles/flip_flashcard.css' %}">
+<label>
+    <input type="checkbox" />
+    <div class="flashcard">
+        <div class="main-content">
+            {{ random_flashcard.answer }}
+        </div>
+        <div class="additional-info">
+            Counter: {{ random_flashcard.flashcard_display_count }}
+        </div>
+        <div class="back">
+            {{ random_flashcard.question }}
+        </div>
+    </div>
+    </div>
+    <div class="back-buttons">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="question_id" value="{{ random_flashcard.id }}">
+            <button class="checkmark-button" name="action" type="submit" value="know"></button>
+            <button class="crossmark-button" name="action" type="submit" value="dont_know"></button>
+        </form>
+    </div>
+</label>
+{% endblock %}

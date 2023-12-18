@@ -1,0 +1,13 @@
+<h4>The most struggled flashcards</h4>
+    <ul class="cloud">  
+       
+    {% for flashcard in flashcards %}
+    <li>
+    <div class="question" answers_ratio="{{flashcard.answers_ratio}}">
+        <div class="tooltip">{{ flashcard.question }}
+        <span class="tooltiptext">{{ flashcard.answer }}</span>
+        </div>
+    </div></li>
+    {% endfor %}
+    </ul>
+

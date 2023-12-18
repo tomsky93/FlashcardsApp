@@ -1,0 +1,76 @@
+{% extends 'flashcards/base.html' %}
+{% load flashcard_tags %}
+{% block content %}
+<style>
+    .button {
+        padding: 12px;
+        color: black;
+        border: none;
+        background-color: #B3C8F2;
+        border-radius: 15px;
+        width: 150px;
+        cursor: pointer;
+    }
+
+    .button:hover {
+        background-color: #3F77BF;
+        color: white;
+        border: none;
+    }
+</style>
+
+<div class="row">
+    <div class="side">
+
+        <div class="menu-container">
+            <h4>Categories</h4>
+            {% get_categories request.user as categories %}
+            {% for category in categories %}
+            <div class="box">
+                <h4> <a
+                        href="{% url 'flashcards:category_detail' category_id=category.id%}">{{ category.category_name }}</a>
+                </h4>
+                <div class="column">
+                    <a href="{% url 'flashcards:quiz' category_id=category.id %}"><i
+                            class="bi bi-card-checklist" title="Start quiz"></i></a>
+                    <a href="{% url 'flashcards:random_flashcards' category_id=category.id %}"><i class="bi bi-book"
+                            title="Practice"></i></a>
+                    <a href="{% url 'flashcards:completion_quiz' category_id=category.id %}"><i
+                            class="bi bi-pencil-square" title="Type translation quiz"></i></a></div>
+            </div>
+
+            {% endfor %}
+            <a href="{% url 'flashcards:category_create' %}" class="button" style="width: 50%;">Create category</a>
+        </div>
+    </div>
+    <div class="main">
+        
+        <form method="post">
+            
+            <div class="form-container">
+                
+                {% csrf_token %}
+                <div class="form-group">
+                    <input type="text" name="question" placeholder="Add some flashcard" required id="id_question"
+                        autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="answer" required id="id_answer" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <div class="select"> {{ form.category }} </div>
+                    {{ form.form_type }}
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="button">Submit</button>
+                </div>
+            </div>
+            
+            <div class="medium-container" style="width: 80%;">
+                {% flashcard_cloud request.user %}
+            </div>
+
+    </div>
+</div>
+
+{% endblock %}
